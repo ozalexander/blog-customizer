@@ -20,7 +20,7 @@
 	width: 616px;
 	height: auto;
 	min-height: 100%;
-	padding: 50px 31px;
+	padding: 33px 31px;
 	background-color: #ffffff;
 	border-right: 1px solid #000000;
 }
@@ -28,5 +28,20 @@
 .bottomContainer {
 	display: flex;
 	justify-content: space-between;
-	margin-top: auto;
+	gap: 192px;
+	margin-top: 157px;
+}
+
+.option_overlay {
+	background-image: src('src/images/icon-overlay.svg');
+	background-size: cover;
+}
+
+.title {
+	margin: 6px 0 55px;
+	color: #000000;
+	font-weight: 800;
+	font-size: 31px;
+	font-family: 'Open Sans', sans-serif;
+	text-transform: uppercase;
 }

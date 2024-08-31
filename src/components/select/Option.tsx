@@ -15,7 +15,7 @@ type OptionProps = {
 
 export const Option = (props: OptionProps) => {
 	const {
-		option: { value, title, optionClassName, className },
+		option: { isDisabled, value, title, optionClassName, className },
 		onClick,
 	} = props;
 	const optionRef = useRef<HTMLLIElement>(null);
@@ -23,7 +23,9 @@ export const Option = (props: OptionProps) => {
 	const handleClick =
 		(clickedValue: OptionType['value']): MouseEventHandler<HTMLLIElement> =>
 		() => {
-			onClick(clickedValue);
+			if (!isDisabled) {
+				onClick(clickedValue);
+			}
 		};
 
 	useEnterOptionSubmit({
@@ -34,7 +36,9 @@ export const Option = (props: OptionProps) => {
 
 	return (
 		<li
-			className={clsx(styles.option, styles[optionClassName || ''])}
+			className={clsx(styles.option, styles[optionClassName || ''], {
+				[styles.option_overlay]: isDisabled,
+			})}
 			value={value}
 			onClick={handleClick(value)}
 			tabIndex={0}
