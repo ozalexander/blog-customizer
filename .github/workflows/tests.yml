@@ -16,8 +16,6 @@ jobs:
         node-version: 16
     - name: Install dependencies
       run: npm install
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps chromium
     - name: Check if the repository is private
       if: ${{github.event.repository.private}}
       run: exit 1
