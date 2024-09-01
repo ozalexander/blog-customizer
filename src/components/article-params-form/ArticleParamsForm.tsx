@@ -47,13 +47,19 @@ export const ArticleParamsForm = ({
 	useEffect(() => {
 		fontColors.map((option: OptionType) => {
 			option.isDisabled = false;
+			if (selectedBackgroundColor.value === option.value) {
+				option.isDisabled = true;
+			}
 		});
-	}, [selectedFontColor]);
+	}, [selectedFontColor, selectedBackgroundColor]);
 	useEffect(() => {
 		backgroundColors.map((option: OptionType) => {
 			option.isDisabled = false;
+			if (selectedFontColor.value === option.value) {
+				option.isDisabled = true;
+			}
 		});
-	}, [selectedBackgroundColor]);
+	}, [selectedBackgroundColor, selectedFontColor]);
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setState({
