@@ -6,12 +6,13 @@
 	display: flex;
 	flex-direction: column;
 	row-gap: 4px;
+	margin-bottom: 51px;
 }
 
 .arrow {
 	position: absolute;
 	top: 50%;
-	right: 6px;
+	right: 16px;
 	margin-top: -12px;
 	transition: transform 0.2s ease-in-out, margin-top 0.2s ease-in-out;
 }
@@ -22,11 +23,15 @@
 	align-items: center;
 	box-sizing: border-box;
 	width: 100%;
-	height: 50px;
-	padding: 15px 17px;
+	height: 46px;
+	padding: 15px 23px;
 	background: rgb(255 255 255);
 	outline: 1px solid #000000;
 	cursor: pointer;
+}
+
+.placeholder:hover {
+	outline: 1px solid #ffc802;
 }
 
 .placeholder[data-selected='true'] {
@@ -39,11 +44,6 @@
 }
 
 .selectWrapper[data-is-active='true'] .placeholder {
-	outline: 3px solid #000000;
-}
-
-.selectWrapper:not([data-is-active='true'])
-	.placeholder:not([data-status='invalid']):hover {
 	outline: 3px solid #000000;
 }
 
@@ -78,13 +78,23 @@
 }
 
 .option:hover {
-	background: var(--grey, #c4c4c4);
+	background: #eeeeee;
+}
+
+.option:active {
+	background: #d7d7d7;
+}
+
+.option_overlay::before {
+	background-image: url('src/images/icon-overlay.svg');
+	background-size: cover;
 }
 
 @mixin option-color-before {
 	content: '';
-	width: 35px;
-	height: 35px;
+	position: relative;
+	width: 25px;
+	height: 25px;
 	margin-right: 10px;
 }
 
@@ -96,9 +106,9 @@
 @mixin option-color-after {
 	content: '';
 	position: absolute;
-	left: 26px;
-	width: 17px;
-	height: 17px;
+	left: 32px;
+	width: 8px;
+	height: 8px;
 	border-radius: 100%;
 }
 

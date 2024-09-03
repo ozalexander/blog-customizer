@@ -5,8 +5,9 @@
 	align-items: center;
 	row-gap: 24px;
 	max-width: var(--container-width, auto);
-	margin: 0 auto;
-	padding: 72px 0 144px;
+	margin: 17px auto;
+	padding: 68px 0 144px;
+	overflow: hidden;
 }
 
 .titleDescription {
@@ -14,7 +15,13 @@
 }
 
 .image {
-	width: 100%;
+	width: 100vw;
 	height: auto;
 	margin-top: 26px;
+	object-fit: cover;
+}
+
+.article_is_wide {
+	padding: 74px 0 144px;
+	overflow: visible;
 }

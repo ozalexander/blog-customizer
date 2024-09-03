@@ -3,12 +3,20 @@ import clsx from 'clsx';
 // Сообщаем вебпаку, что этот файл использует это изображение.
 import plane from 'src/images/plane.png';
 import { Text } from 'components/text';
+import useWidenessCheck from '../../hooks/useWidenessCheck';
 
 import styles from './Article.module.scss';
+import { useRef, useState } from 'react';
 
 export const Article = () => {
+	// Необходимо для растягивания картинки для соответствия макету
+	const containerRef = useRef<HTMLDivElement | null>(null);
+	const [isWide, setWidth] = useState(false);
+	useWidenessCheck({ containerRef, setWidth });
 	return (
-		<article className={clsx(styles.article)}>
+		<article
+			className={clsx(styles.article, { [styles.article_is_wide]: isWide })}
+			ref={containerRef as React.RefObject<HTMLElement>}>
 			<Text as='h1' size={45} weight={800} uppercase dynamicLite>
 				Портрет Западной Швейцарии
 			</Text>
