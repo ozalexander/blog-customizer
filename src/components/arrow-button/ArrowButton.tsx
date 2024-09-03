@@ -16,6 +16,7 @@ export const ArrowButton = ({
 }) => {
 	return (
 		<div
+			onMouseDown={(e) => e.stopPropagation()}
 			onClick={() => setOpen(!isOpen)}
 			onKeyUp={(e) => {
 				if (e.key === 'Enter') {

@@ -2,10 +2,11 @@ import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
 import styles from './ArticleParamsForm.module.scss';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState, useRef } from 'react';
 import { Select } from 'components/select';
 import { RadioGroup } from 'components/radio-group';
 import { Separator } from 'components/separator';
+import useCloseByOutsideClick from '../../hooks/useCloseByOutsideClick';
 import {
 	fontFamilyOptions,
 	fontColors,
@@ -18,105 +19,69 @@ import {
 } from 'src/constants/articleProps';
 
 export const ArticleParamsForm = ({
-	setState,
+	setArticleState,
 }: {
-	setState: React.Dispatch<React.SetStateAction<ArticleStateType>>;
+	setArticleState: React.Dispatch<React.SetStateAction<ArticleStateType>>;
 }) => {
+	const containerRef = useRef<HTMLDivElement>(null);
 	const [isOpen, setOpen] = useState(false);
-	const [selectedFont, setFont] = useState<OptionType>(fontFamilyOptions[0]);
-	const [selectedFontSize, setFontSize] = useState<OptionType>(
-		fontSizeOptions[0]
-	);
-	const [selectedFontColor, setFontColor] = useState<OptionType>(fontColors[0]);
-	const [selectedBackgroundColor, setBackgroundColor] = useState<OptionType>(
-		backgroundColors[0]
-	);
-	const [selectedWidth, setWidth] = useState<OptionType>(contentWidthArr[0]);
-	const onChange = (
-		selectedOption: OptionType,
-		setter: React.Dispatch<React.SetStateAction<OptionType>>,
-		props?: OptionType[]
-	) => {
-		setter(selectedOption);
-		props?.map((option) => {
-			if (selectedOption.value === option.value) {
-				option.isDisabled = true;
-			}
-		});
+	const [tempState, setTempState] = useState(defaultArticleState);
+	useCloseByOutsideClick({
+		setOpen,
+		containerRef,
+	});
+	const handleOnChange = (field: keyof ArticleStateType) => {
+		return (value: OptionType) => {
+			setTempState((prevState) => ({ ...prevState, [field]: value }));
+		};
 	};
-	useEffect(() => {
-		fontColors.map((option: OptionType) => {
-			option.isDisabled = false;
-			if (selectedBackgroundColor.value === option.value) {
-				option.isDisabled = true;
-			}
-		});
-	}, [selectedFontColor, selectedBackgroundColor]);
-	useEffect(() => {
-		backgroundColors.map((option: OptionType) => {
-			option.isDisabled = false;
-			if (selectedFontColor.value === option.value) {
-				option.isDisabled = true;
-			}
-		});
-	}, [selectedBackgroundColor, selectedFontColor]);
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		setArticleState(tempState);
 		e.preventDefault();
-		setState({
-			fontFamilyOption: selectedFont,
-			fontSizeOption: selectedFontSize,
-			fontColor: selectedFontColor,
-			backgroundColor: selectedBackgroundColor,
-			contentWidth: selectedWidth,
-		});
 		setOpen(false);
 	};
 	const onReset = () => {
-		setFont(defaultArticleState.fontFamilyOption);
-		setFontSize(defaultArticleState.fontSizeOption);
-		setFontColor(defaultArticleState.fontColor);
-		setBackgroundColor(defaultArticleState.backgroundColor);
-		setWidth(defaultArticleState.contentWidth);
-		setState(defaultArticleState);
+		setArticleState(defaultArticleState);
 		setOpen(false);
 	};
 	return (
 		<>
 			<ArrowButton isOpen={isOpen} setOpen={setOpen} />
 			<aside
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				className={clsx(styles.container, { [styles.container_open]: isOpen })}
+				ref={containerRef}>
 				<form className={styles.form} onSubmit={onSubmit} onReset={onReset}>
 					<h1 className={styles.title}>Задайте параметры</h1>
 					<Select
 						options={fontFamilyOptions}
-						selected={selectedFont}
-						onChange={(e) => onChange(e, setFont)}
+						selected={tempState.fontFamilyOption}
+						onChange={handleOnChange('fontFamilyOption')}
 						title='Шрифт'
 					/>
 					<RadioGroup
 						name='FontSize'
 						options={fontSizeOptions}
-						selected={selectedFontSize}
-						onChange={(e) => setFontSize(e)}
+						selected={tempState.fontSizeOption}
+						onChange={handleOnChange('fontSizeOption')}
 						title='Размер шрифта'
 					/>
 					<Select
 						options={fontColors}
-						selected={selectedFontColor}
-						onChange={(e) => onChange(e, setFontColor, backgroundColors)}
+						selected={tempState.fontColor}
+						onChange={handleOnChange('fontColor')}
 						title='Цвет шрифта'
 					/>
 					<Separator />
 					<Select
 						options={backgroundColors}
-						selected={selectedBackgroundColor}
-						onChange={(e) => onChange(e, setBackgroundColor, fontColors)}
+						selected={tempState.backgroundColor}
+						onChange={handleOnChange('backgroundColor')}
 						title='Цвет фона'
 					/>
 					<Select
 						options={contentWidthArr}
-						selected={selectedWidth}
-						onChange={(e) => onChange(e, setWidth)}
+						selected={tempState.contentWidth}
+						onChange={handleOnChange('contentWidth')}
 						title='Ширина контента'
 					/>
 					<div className={styles.bottomContainer}>
